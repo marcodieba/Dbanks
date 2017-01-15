@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <title>Extrato</title>
+</head>
+<link rel="stylesheet" href="../static/css/bootstrap.min.css">
+<style type="text/css">
+
+#home{
+
+    color-interpolation: #000;
+    text-align: center;
+}
+.navbar .brand {
+    color: #777777;
+    display: block;
+    float: left;
+    font-size: 20px;
+    font-weight: 200;
+    margin-left: -20px;
+    padding: 10px 20px;
+    text-shadow: 0 1px 0 #ffffff;
+}
+.navbar-inner::before, .navbar-inner::after {
+    content: "";
+    display: table;
+    line-height: 0;
+}
+.navbar-inner::after {
+    clear: both;
+}
+.navbar-inner::before, .navbar-inner::after {
+    content: "";
+    display: table;
+    line-height: 0;
+}
+.navbar-inner {
+    background-color: #fafafa;
+    background-image: linear-gradient(to bottom, #ffffff, #f2f2f2);
+    background-repeat: repeat-x;
+    border: 1px solid #d4d4d4;
+    border-radius: 4px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.067);
+    min-height: 40px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+    .table-bordered > tbody > tr > td, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > td, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > thead > tr > th {
+    border: 1px solid #357AE8;
+    }
+    .table-bordered {
+    border: 1px solid #357AE8;
+    }
+    thead,th{
+        background: #023F80;
+        color:#fff;
+    }
+    tr{
+        text-align: left;
+        color: #357AE8;
+    }
+    .table-hover{
+        /*background: #E7E7E9;*/
+    }
+   
+    .table-hover > tbody > tr:hover {
+        background: #357AE8;
+        color: #fff !important;
+        border: 1px solid #fff !important;
+    }
+    :invalid { 
+  border-color: #e88;
+  -webkit-box-shadow: 0 0 5px rgba(255, 0, 0, .8);
+  -moz-box-shadow: 0 0 5px rbba(255, 0, 0, .8);
+  -o-box-shadow: 0 0 5px rbba(255, 0, 0, .8);
+  -ms-box-shadow: 0 0 5px rbba(255, 0, 0, .8);
+  box-shadow:0 0 5px rgba(255, 0, 0, .8);
+}
+
+    :required {
+      border-color: #88a;
+      -webkit-box-shadow: 0 0 5px rgba(0, 0, 255, .5);
+      -moz-box-shadow: 0 0 5px rgba(0, 0, 255, .5);
+      -o-box-shadow: 0 0 5px rgba(0, 0, 255, .5);
+      -ms-box-shadow: 0 0 5px rgba(0, 0, 255, .5);
+      box-shadow: 0 0 5px rgba(0, 0, 255, .5);
+}
+
+    form {
+      width:300px;
+      margin: 20px auto;
+}
+
+    input {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      border:1px solid #ccc;
+      font-size:20px;
+      width:300px;
+      min-height:30px;
+      display:block;
+      margin-bottom:15px;
+      margin-top:5px;
+      outline: none;
+
+      -webkit-border-radius:5px;
+      -moz-border-radius:5px;
+      -o-border-radius:5px;
+      -ms-border-radius:5px;
+      border-radius:5px;
+}
+
+    input[type=submit] {
+      background:none;
+      padding:10px;
+}
+a{
+ text-decoration: none;   
+}
+</style>
+<body>
+<section class="row-fluid">
+    <div class="table-responsive container">
+        <div class="navbar">
+            <div class="navbar-inner">
+                <h1 class="brand">DBanks</h1>
+                <div class="btn-group pull-right">
+                    <h3>{{nome.nome}}</h3>
+                    <a class="pull-right" href="logout" >Sair</a>
+                </div>
+            </div>      
+        </div>
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>DATA</th>
+                    <th>HISTORICO</th>
+                    <th>PARCELAS</th>
+                    <th>VALOR</th>
+                </tr>
+            </thead>
+            <tbody>
+              {% for i in testes %}
+                  <tr>
+                    <td class="list-buttons-column">{{i.data}}</td>
+                    <td>{{i.loja}}</td>
+                    <td>{{i.parcela}}</td>
+                    <td>{{i.valor}}</td>                    
+                  </tr>
+              {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+</body>
+</html>
+

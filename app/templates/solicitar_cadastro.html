@@ -1,0 +1,49 @@
+
+<link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css">
+
+<div class="row-fluid" style="text-align: center;">
+
+  <div class="container">
+  <h1 style="color: rgb(93,160,225)">Solicitação de Cadastro</h1>
+   <div class="col-md-offset-4 col-sm-offset-4 col-sm-4">
+      <form class="form-horizontal" method="POST" oninput="total.value = (nights.valueAsNumber * 99) + 
+     ((guests.valueAsNumber - 1) * 10)">
+        <div class="form-group">
+            <div class="col-sm-12">
+              <input class="form-control" type="text" id="full_name" name="nome" placeholder="Nome" required>
+            </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-12">
+            <input class="form-control" type="email" id="email_addr" name="email" placeholder="Email" required> 
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-12">
+            <input class="form-control" type="Fone" id="fone" name="fone" placeholder="Fone" required>    
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-12">
+            <input class="form-control" type="endereco" id="endereco" name="endereco" placeholder="Endereço" required>    
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-12">
+            <input class="col-sm-12" type="submit" value="Cadastrar" /> 
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<script>
+  function check(input) {
+    if (input.value != document.getElementById('passwd').value) {
+      input.setCustomValidity('Password não correspondem.');
+    } else {
+      // input is valid -- reset the error message
+      input.setCustomValidity('');
+    }
+  }
+</script>
