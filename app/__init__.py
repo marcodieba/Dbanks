@@ -6,12 +6,16 @@ from flask_admin.contrib import sqla
 
 from flask_security import Security, SQLAlchemyUserDatastore
 from flask_admin import helpers as admin_helpers
+from flask_migrate import Migrate
+# from .models import Users, AdminUser
 
 app = Flask(__name__)
 
 app.config.from_object('config')
 
 db = SQLAlchemy(app)
+migrate = Migrate(app, db, render_as_batch=True)
+
 
 from app import views
 # from models import Role, User

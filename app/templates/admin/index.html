@@ -1,17 +1,203 @@
 {% extends 'admin/master.html' %}
+
+{% block tail %}
+<script>
+  $('#myModal').on('show.bs.modal', async function (event) {
+   var button = $(event.relatedTarget) // Button that triggered the modal
+   var recipient = button.data('whatever') // Extract info from data-* attributes
+   // console.log(recipient)
+   const botao = $('#'+recipient).click(function(){
+           var valor = $(this).val();
+           });
+
+   const url = `http://192.168.20.5:8090/${recipient}`;
+   const dados = await fetch(url);
+   const json_dados = await dados.json();
+   
+   
+   // const modal = $(this)
+   // modal.add('.modal-body').val(json_dados)
+   const div = await document.getElementById('dados');
+   div.innerText = '';
+   
+   json_dados.forEach(function (item, indice, array){
+       // lista.push(item.loja,item.parcela,item.valor);
+       // lista.push();
+       // lista.push();
+
+       div.innerHTML += "<div>"+"<p>"+"LOJA:"+"<span> "+ item.loja  +"</span>"+"</p>"+
+       "<p>"+"DATA:"+"<span> "+ item.data  +"</span>"+"</p>"+
+       "<span>"+"PARCELA:"+"<span> "+ item.parcela  +"</span>"+"</span>"+
+       "<p>"+"VALOR:"+"<span"+" class"+"="+"'"+"valor"+"'" + ">" + item.valor  +"</span>"+"</p>"+
+        "<span>"+ "________________________________________________________________________" + "</span>"+"</div>";    
+       });
+   // console.log(json_dados)
+   
+   var modal = $(this)
+       modal.find('.modal-title').text(botao.val())
+       // modal.find('.modal-body').text(lista)
+       
+   });
+ 
+</script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.map"></script> -->
+<!-- <script src="../static/js/jquery-1.11.3.js"></script> -->
+
+<!-- <script>
+    function CriaPDF() {
+        var minhaTabela = document.getElementById('dados').innerHTML;
+
+        var style = "<style>";
+        style = style + "html { font-size: 12pt; }";
+        style = style + ".folha { background-color: #ccc; padding: 0.5em; }";
+        style = style + ".a4_vertical { width: 793px; height: 1100px; }";
+        style = style + "table {width: 100%;font: 20px Calibri;}";
+        style = style + "table, th, td {border: solid 1px #DDD; border-collapse: collapse;";
+        style = style + "padding: 2px 3px;text-align: center;}";
+        style = style + "</style>";
+
+        
+
+        // CRIA UM OBJETO WINDOW
+        var win = window.open('', '', 'height=700,width=900');
+        var qvalor = 0;
+        $( ".valor" ).each(function() {
+            qvalor += parseFloat($( this ).text());
+        });
+        var title = $( "#myModalLabel" ).text();
+        
+        win.document.write('<html><head>');
+        win.document.write('<title>'+ title +'</title>');   // <title> CABEÇALHO DO PDF.
+        win.document.write(style);                       // INCLUI UM ESTILO NA TAB HEAD
+        win.document.write('</head>');
+        win.document.write('<body>');
+        win.document.write('<div><h1>Pereca Banks</h1><div><h2>Extrato</h2><h3>'+title+'</h3></div></div>');
+        win.document.write('<div class="folha a4_vertical">'+minhaTabela+'<div>');                   // O CONTEUDO DA TABELA DENTRO DA TAG BODY
+        win.document.write('<p>'+qvalor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })+'</p>');
+        win.document.write('</body></html>');
+
+        win.document.close();                               // FECHA A JANELA
+
+        win.print();                                        // IMPRIME O CONTEUDO
+    }
+</script> -->
+<script type="text/javascript">
+   $(function(){
+ 
+      var valorCalculado = 0;
+      var qtsaida = 0;
+      var qtentrada = 0;
+      var qvalor = 0;
+
+      $( ".qttotal" ).each(function() {
+        valorCalculado += parseFloat($( this ).text());
+      });
+      $( ".qtsaidat" ).each(function() {
+        qtsaida += parseInt($( this ).text());
+      });
+      $( ".qtentradat" ).each(function() {
+        qtentrada += parseInt($( this ).text());
+      });
+      $( ".valor" ).each(function() {
+        qvalor += parseInt($( this ).text());
+      });
+       $( "#qtdtotal" ).text(valorCalculado.toFixed(2));
+       $( "#qtdsaida" ).text(qtsaida);
+       $( "#qtdentrada" ).text(qtentrada);
+       $( "#qtvalor" ).text(qvalor);
+
+    });
+
+ </script>
+ <script type="text/javascript">
+    $(".my").on({click: function(){
+    var pr = $(this).val();
+    // if (!data) return event.preventDefault();
+    URL="/imprimir/"+pr;
+    var win = window.open(URL, 'janela', 'width=960, height=610, top=50, left=699, scrollbars=yes, status=no, toolbar=no, location=no, menubar=no, resizable=no, fullscreen=no')
+    win.print();
+    // win.close();
+    // console.log(json_dados[nome_id])
+    
+  }  
+
+});
+  // function {
+  //  $("#my").click(function() {
+  //   teste = parseInt($( this ).text());
+  // URL="/imprimir/"+teste;
+  // window.open(URL, 'janela', 'width=660, height=510, top=100, left=699, scrollbars=yes, status=no, toolbar=no, location=no, menubar=no, resizable=no, fullscreen=no')}
+  // function fechar(){
+  //   window.close();
+  // }
+</script>
+{% endblock %}
+
 {% block body %}
 {{ super() }}
-<div class="row-fluid">
 
+
+<div class="row-fluid">
     <div>
         {% if current_user.is_authenticated %}
-        <h1>Flask-Admin example</h1>
-        <p class="lead">
-            Authentication
-        </p>
-        <p>
-            This example shows how you can use Flask-Login for authentication. It is only intended as a basic demonstration.
-        </p>
+    
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>NOME</th>
+                    <th>HISTORICO</th>
+                    <th>PARCELAS</th>
+                    <th>VALOR</th>
+                </tr>
+            </thead>
+            <tbody>
+              {% for obj in query %}
+                  <tr>
+                    <td class="list-buttons-column">
+                      <button style="border: none; background: none; color:blue;" id={{obj.nome_id}} value="{{ obj.nome }}" type="button" class="botao" data-toggle="modal" data-target="#myModal" data-whatever="{{obj.nome_id}}" >{{obj.nome}}</button>
+                    </td>
+                    <td>{{obj.loja}}</td>
+                    <td>{{obj.parcela}}</td>
+                    <td >R$ <span class="qttotal">{{"%.2f"|format(obj.valor)}}</span></td>
+                    <td> 
+                        <button value="{{ obj.nome_id }}" data="TESTE" type="button" class="my no-print float-right d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-whatever="{{obj.nome_id}}">IMPRIMIR</button>
+                    </td>
+                        
+                  </tr>
+              {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th class="text-right" colspan=4>Total</th>
+                </tr>
+                <tr>
+                    <td colspan=4 class="text-right" >R$ <span id="qtdtotal"></span></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</section>
+<section>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel"></h4>
+          </div>
+          <div id="dados" class="row modal-body">
+            
+          </div>
+          <p id="qtvalor"></p>
+          <div class="modal-footer">
+            
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+</section>
         {% else %}
         <form method="POST" action="">
             {{ form.hidden_tag() if form.hidden_tag }}

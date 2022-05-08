@@ -3,7 +3,15 @@
 <head>
     <title>Extrato</title>
 </head>
-<link rel="stylesheet" href="../static/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href='..static/css/print-dashboard.css'>
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<!-- <link rel="stylesheet" href="../static/css/bootstrap.min.css"> -->
 <style type="text/css">
 
 #home{
@@ -118,14 +126,20 @@ a{
 }
 </style>
 <body>
-<section class="row-fluid">
+<section class="no-print row-fluid">
     <div class="table-responsive container">
+        <img style="float: left; z-index:1; position: relative;" class="img-responsive" src="../static/img/perereca_min.png">
         <div class="navbar">
             <div class="navbar-inner">
-                <h1 class="brand">DBanks</h1>
+                <h1 class="btn-primary">PERERECA BANKS</h1>
                 <div class="btn-group pull-right">
-                    <h3>{{nome.nome}}</h3>
+                    <h3>
+                        
+                    </h3>
                     <a class="pull-right" href="logout" >Sair</a>
+                </div>
+                <div>
+                    <a href="{{ url_for('admin.index') }}">AMDIN</a>
                 </div>
             </div>      
         </div>
@@ -139,19 +153,117 @@ a{
                 </tr>
             </thead>
             <tbody>
-              {% for i in testes %}
+              {% for obj in query %}
                   <tr>
-                    <td class="list-buttons-column">{{i.data}}</td>
-                    <td>{{i.loja}}</td>
-                    <td>{{i.parcela}}</td>
-                    <td>{{i.valor}}</td>                    
+                    <td class="list-buttons-column">
+                        <button id={{obj.nome_id}} value="{{ obj.nome }}" type="button" class="botao btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal" data-whatever="{{obj.nome_id}}" >{{obj.nome}}</button>
+                        <!-- <button formmethod="get" type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+                            {{obj.nome}}
+                        </button> -->
+                    </td>
+                    <td>{{obj.loja}}</td>
+                    <td>{{obj.parcela}}</td>
+                    <td >R$ <span class="qttotal">{{"%.2f"|format(obj.valor)}}</span></td>                    
                   </tr>
               {% endfor %}
             </tbody>
+            <tfoot>
+                <tr>
+                    <th class="text-right" colspan=4>Total</th>
+                </tr>
+                <tr>
+                    <td colspan=4 class="text-right" >R$ <span id="qtdtotal"></span></td>
+                </tr>
+            </tfoot>
         </table>
     </div>
 </section>
+<section>
+      <!-- Modal -->
+      <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="myModalLabel"></h4>
+            </div>
+            <div id="dados" class="modal-body only-print">
+              
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button onclick="window.print()" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Gerar Relatório</button>
+            </div>
+          </div>
+        </div>
+      </div>
+</section>
+<script>
 
+   
+   $('#myModal').on('show.bs.modal', async function (event) {
+    var button = $(event.relatedTarget) // Button that triggered the modal
+    var recipient = button.data('whatever') // Extract info from data-* attributes
+    const botao = $('#'+recipient).click(function(){
+            var valor = $(this).val();
+            });
+
+    const url = `http://192.168.20.5:8090/${recipient}`;
+    const dados = await fetch(url);
+    const json_dados = await dados.json();
+    // console.log(json_dados);
+    
+    // const modal = $(this)
+    // modal.add('.modal-body').val(json_dados)
+    const div = await document.getElementById('dados');
+    div.innerText = '';
+    
+    json_dados.forEach(function (item, indice, array){
+        // lista.push(item.loja,item.parcela,item.valor);
+        // lista.push();
+        // lista.push();
+        div.innerHTML += "<p>"+"LOJA:"+"<span> "+ item.loja  +"</span>"+"</p>";
+        div.innerHTML += "<p>"+"DATA:"+"<span> "+ item.data  +"</span>"+"</p>";
+        div.innerHTML += "<p>"+"PARCELA:"+"<span> "+ item.parcela  +"</span>"+"</p>";
+        div.innerHTML += "<p>"+"VALOR:"+"<span> "+ item.valor  +"</span>"+"</p>";
+        div.innerHTML += "<p>"+ "________________________________________________________________________" + "</p>";
+        
+        });
+    
+    var modal = $(this)
+        modal.find('.modal-title').text(botao.val())
+        // modal.find('.modal-body').text(lista)
+        
+    });
+   
+</script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.map"></script> -->
+<!-- <script src="../static/js/jquery-1.11.3.js"></script> -->
+
+<script type="text/javascript">
+    $(function(){
+  
+       var valorCalculado = 0;
+       var qtsaida = 0;
+       var qtentrada = 0;
+  
+       $( ".qttotal" ).each(function() {
+         valorCalculado += parseFloat($( this ).text());
+       });
+       $( ".qtsaidat" ).each(function() {
+         qtsaida += parseInt($( this ).text());
+       });
+       $( ".qtentradat" ).each(function() {
+         qtentrada += parseInt($( this ).text());
+       });
+        $( "#qtdtotal" ).text(valorCalculado);
+        $( "#qtdsaida" ).text(qtsaida);
+        $( "#qtdentrada" ).text(qtentrada);
+     });
+  
+  
+  </script>
+  
 </body>
 </html>
 

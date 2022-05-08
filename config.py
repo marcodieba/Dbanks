@@ -3,7 +3,7 @@ import os
 
 _basedir = os.path.abspath(os.path.dirname(__file__))
 
-DEBUG = False
+DEBUG = True
 
 ADMINS = ''
 
@@ -38,3 +38,6 @@ CSRF_ENABLED = True
 
 CSRF_SESSION_KEY = 'SOMETHING_IMPOSSIBLE_TO_GUEES'
 
+FLASK_ADMIN_SWATCH = 'cerulean'
+
+TEMPLATES_AUTO_RELOAD = True

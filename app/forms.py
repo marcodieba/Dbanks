@@ -1,19 +1,19 @@
 # -*- Mode: Python; coding: utf-8 -*-
 
 from flask_wtf import FlaskForm
-from wtforms import form, BooleanField, fields, validators, StringField, TextField, PasswordField, Form, BooleanField					
-from app.models import Users, AdminUser, Cadastro
+from wtforms import form, BooleanField, fields, validators, StringField, PasswordField, Form, BooleanField					
+from app.models import AdminUser, Cadastro
 from app import db
-from werkzeug import check_password_hash, generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 class LoginForm(form.Form):
-	email = fields.TextField('Email', validators=[validators.DataRequired()])
+	email = fields.StringField('Email', validators=[validators.DataRequired()])
 	passwd = fields.PasswordField('Password', validators=[validators.DataRequired()])
 
 class CadastroForm(form.Form):
-	nome = fields.TextField('Nome', validators=[validators.DataRequired()])
-	email = fields.TextField('Email', validators=[validators.DataRequired()])
+	nome = fields.StringField('Nome', validators=[validators.DataRequired()])
+	email = fields.StringField('Email', validators=[validators.DataRequired()])
 	passwd = PasswordField('Password', validators=[
 												validators.DataRequired(),
 												validators.EqualTo('confirm', message='Passwords must match')
@@ -21,16 +21,16 @@ class CadastroForm(form.Form):
 	confirm = PasswordField('Repeat Password')
 
 class SolicitarCadastroForm(form.Form):
-    nome = fields.TextField('Nome', validators=[validators.DataRequired()])
-    cpf = fields.TextField('CPF', validators=[validators.DataRequired()])
-    email = fields.TextField('Email', validators=[validators.DataRequired()])
-    endereco = fields.TextField('Endereco', validators=[validators.DataRequired()])
-    fone = fields.TextField('Fone', validators=[validators.DataRequired()])
+    nome = fields.StringField('Nome', validators=[validators.DataRequired()])
+    cpf = fields.StringField('CPF', validators=[validators.DataRequired()])
+    email = fields.StringField('Email', validators=[validators.DataRequired()])
+    endereco = fields.StringField('Endereco', validators=[validators.DataRequired()])
+    fone = fields.StringField('Fone', validators=[validators.DataRequired()])
 
 # Define login and registration forms (for flask-login)
 class LoginFormAdmin(FlaskForm):
-    login = fields.TextField(validators=[validators.required()])
-    password = fields.PasswordField(validators=[validators.required()])
+    login = fields.StringField(validators=[validators.DataRequired()])
+    password = fields.PasswordField(validators=[validators.DataRequired()])
 
     def validate_login(self, field):
         user = self.get_user()
@@ -46,3 +46,13 @@ class LoginFormAdmin(FlaskForm):
 
     def get_user(self):
         return db.session.query(AdminUser).filter_by(login=self.login.data).first()
+
+
+class ExtratoForm(form.Form):
+    data = fields.StringField('Nome', validators=[validators.DataRequired()])
+    loja = fields.StringField('CPF', validators=[validators.DataRequired()])
+    parcela = fields.StringField('Email', validators=[validators.DataRequired()])
+    valor = fields.StringField('Endereco', validators=[validators.DataRequired()])
+    fone = fields.StringField('Fone', validators=[validators.DataRequired()])
+
+    

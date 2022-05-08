@@ -1,14 +1,15 @@
 {% extends 'admin/base.html' %}
-
 {% block access_control %}
 {% if current_user.is_authenticated %}
+
 <div class="btn-group pull-right">
-    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-        <i class="icon-user"></i> {{ current_user.login }} <span class="caret"></span>
-    </a>
-    <ul class="dropdown-menu">
-        <li><a href="{{ url_for('admin.logout_view') }}">Log out</a></li>
-    </ul>
+  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <i class="icon-user"></i> {{ current_user.login }} <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+    <li><a href="{{ url_for('admin.logout_view') }}">Sair</a></li>
+  </ul>
 </div>
+
 {% endif %}
 {% endblock %}
